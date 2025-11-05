@@ -31,9 +31,10 @@ class DBHelper {
       // ensure default menu populated
       final items = await getMenuItems();
       if (items.isEmpty) {
-        await insertMenuItem(MenuItemModel(name: 'Veg Momos', price: 50));
-        await insertMenuItem(MenuItemModel(name: 'Chicken Momos', price: 80));
-        await insertMenuItem(MenuItemModel(name: 'Paneer Momos', price: 70));
+        await insertMenuItem(MenuItemModel(name: 'Veg Momos Boiled', price: 50));
+        await insertMenuItem(MenuItemModel(name: 'Chicken Momos Boiled', price: 80));
+        await insertMenuItem(MenuItemModel(name: 'Paneer Momos Boiled', price: 70));
+        await insertMenuItem(MenuItemModel(name: 'beef Momos Boiled', price: 70));
       }
       _isInitialized = true;
     } catch (e) {
