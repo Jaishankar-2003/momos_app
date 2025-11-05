@@ -58,14 +58,14 @@ class CartScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 150),
             child: Column(
               children: [
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  const Text('Total', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('₹${provider.total.toStringAsFixed(2)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text('Total', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  Text('₹${provider.total.toStringAsFixed(2)}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 ]),
-                const SizedBox(height: 12),
+                const SizedBox(height: 100),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
