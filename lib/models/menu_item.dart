@@ -6,11 +6,7 @@ class MenuItemModel {
   MenuItemModel({this.id, required this.name, required this.price});
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'price': price,
-    };
+    return {'id': id, 'name': name, 'price': price};
   }
 
   factory MenuItemModel.fromMap(Map<String, dynamic> m) {

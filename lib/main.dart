@@ -9,7 +9,10 @@ import 'services/db_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DBHelper.instance.initDB(); // init DB early
+  // Initialize DB in background to not block UI
+  DBHelper.instance.initDB().catchError((error) {
+    debugPrint('DB initialization error: $error');
+  });
   runApp(const MyApp());
 }
 
@@ -22,9 +25,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: "Mallang's Momos POS",
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-        ),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
         initialRoute: '/',
         routes: {
           '/': (_) => const MenuScreen(),
