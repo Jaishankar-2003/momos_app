@@ -87,6 +87,7 @@ class DBHelper {
         MenuItemModel(name: 'Veg Momos', price: 50),
         MenuItemModel(name: 'Chicken Momos', price: 80),
         MenuItemModel(name: 'Paneer Momos', price: 70),
+        MenuItemModel(name: 'chicken Rice', price: 70),
       ];
     }
     final rows = await db.query('menu_items', orderBy: 'id DESC');
