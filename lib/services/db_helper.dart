@@ -30,11 +30,22 @@ class DBHelper {
       _db ??= await _init();
       // ensure default menu populated
       final items = await getMenuItems();
-      if (items.isEmpty) {
-        await insertMenuItem(MenuItemModel(name: 'Veg Momos Boiled', price: 50));
-        await insertMenuItem(MenuItemModel(name: 'Chicken Momos Boiled', price: 80));
-        await insertMenuItem(MenuItemModel(name: 'Paneer Momos Boiled', price: 70));
-        await insertMenuItem(MenuItemModel(name: 'beef Momos Boiled', price: 70));
+      final itemNames = items.map((item) => item.name.toLowerCase()).toSet();
+
+      // Default menu items that should exist
+      final defaultItems = [
+        MenuItemModel(name: 'Veg Momos Boiled', price: 50),
+        MenuItemModel(name: 'Chicken Momos Boiled', price: 80),
+        MenuItemModel(name: 'Paneer Momos Boiled', price: 70),
+        MenuItemModel(name: 'beef Momos Boiled', price: 70),
+      ];
+
+      // Add any missing items
+      for (final item in defaultItems) {
+        if (!itemNames.contains(item.name.toLowerCase())) {
+          await insertMenuItem(item);
+          debugPrint('Added missing menu item: ${item.name}');
+        }
       }
       _isInitialized = true;
     } catch (e) {
@@ -85,10 +96,10 @@ class DBHelper {
     if (db == null) {
       // Return default items for web
       return [
-        MenuItemModel(name: 'Veg Momos', price: 50),
-        MenuItemModel(name: 'Chicken Momos', price: 80),
-        MenuItemModel(name: 'Paneer Momos', price: 70),
-        MenuItemModel(name: 'chicken Rice', price: 70),
+        MenuItemModel(name: 'Veg Momos Boiled', price: 50),
+        MenuItemModel(name: 'Chicken Momos Boiled', price: 80),
+        MenuItemModel(name: 'Paneer Momos Boiled', price: 70),
+        MenuItemModel(name: 'beef Momos Boiled', price: 70),
       ];
     }
     final rows = await db.query('menu_items', orderBy: 'id DESC');
