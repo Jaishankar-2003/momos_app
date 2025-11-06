@@ -225,11 +225,11 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
           if (total > 0)
             Positioned(
-              bottom: 10,
+              bottom: 75,
               left: 10,
               right: 10,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.green.shade600,
                   borderRadius: BorderRadius.circular(12),
@@ -242,7 +242,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   children: [
                     Text(
                       'Total: ₹${total.toStringAsFixed(2)}',
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.white),

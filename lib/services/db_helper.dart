@@ -5,7 +5,8 @@ import 'package:sqflite/sqflite.dart';
 import '../models/menu_item.dart';
 import '../models/order.dart';
 
-class DBHelper {
+class DBHelper
+{
   DBHelper._privateConstructor();
   static final DBHelper instance = DBHelper._privateConstructor();
 
@@ -37,7 +38,10 @@ class DBHelper {
         MenuItemModel(name: 'Veg Momos Boiled', price: 50),
         MenuItemModel(name: 'Chicken Momos Boiled', price: 80),
         MenuItemModel(name: 'Paneer Momos Boiled', price: 70),
-        MenuItemModel(name: 'beef Momos Boiled', price: 70),
+        MenuItemModel(name: 'Veg Momos Fried', price: 70),
+        MenuItemModel(name: 'Chicken Momos Fried', price: 70),
+        MenuItemModel(name: 'French Fries Veg', price: 70),
+        MenuItemModel(name: 'Paneer Momos Fried', price: 70),
       ];
 
       // Add any missing items
@@ -99,7 +103,11 @@ class DBHelper {
         MenuItemModel(name: 'Veg Momos Boiled', price: 50),
         MenuItemModel(name: 'Chicken Momos Boiled', price: 80),
         MenuItemModel(name: 'Paneer Momos Boiled', price: 70),
-        MenuItemModel(name: 'beef Momos Boiled', price: 70),
+        MenuItemModel(name: 'Veg Momos Fried', price: 70),
+        MenuItemModel(name: 'Chicken Momos Fried', price: 70),
+        MenuItemModel(name: 'French Fries Veg', price: 70),
+        MenuItemModel(name: 'Paneer Momos Fried', price: 70),
+
       ];
     }
     final rows = await db.query('menu_items', orderBy: 'id DESC');
@@ -178,4 +186,21 @@ class DBHelper {
     }
     return sum;
   }
+
+  Future<int> deleteOrder(int id) async {
+    final db = await database;
+    if (db == null) {
+      debugPrint('Database not available (web platform)');
+      return 0;
+    }
+    return await db.delete('orders', where: 'id = ?', whereArgs: [id]);
+  }
+
+
+
+
+
 }
+
+
+
