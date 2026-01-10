@@ -95,6 +95,7 @@ class DBHelper
         await db.execute('''
           CREATE TABLE orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT,
             items TEXT NOT NULL,
             total REAL NOT NULL,
             date TEXT NOT NULL,
@@ -147,7 +148,6 @@ class DBHelper
         MenuItemModel(name: 'Chilli panner', price: 120),
         MenuItemModel(name: 'Chilli kalan', price: 100),
         MenuItemModel(name: 'Egg mix chicken Burgi', price: 120),
-
 
 
       ];

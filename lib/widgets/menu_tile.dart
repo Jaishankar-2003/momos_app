@@ -36,7 +36,7 @@ class MenuTile extends StatelessWidget {
 
   bool get isVeg {
     final lower = name.toLowerCase();
-    return lower.contains('veg') || lower.contains('paneer') || lower.contains('French') ;
+    return lower.contains('veg') || lower.contains('Paneer') || lower.contains('Kalan') || lower.contains('kalan') || lower.contains('French') || lower.contains('french') || lower.contains('paneer') ;
   }
 
   @override
