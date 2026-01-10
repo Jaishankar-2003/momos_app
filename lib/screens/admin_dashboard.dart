@@ -93,11 +93,9 @@
 
 //===========================================================================================================================
 
-
 import 'package:flutter/material.dart';
 import '../services/db_helper.dart';
 import '../services/admin_report_pdf.dart';
-
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -107,7 +105,7 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   double totalToday = 0;
-  Map<String,int> top = {};
+  Map<String, int> top = {};
 
   @override
   void initState() {
@@ -133,27 +131,52 @@ class _AdminDashboardState extends State<AdminDashboard> {
         child: ListView(
           padding: const EdgeInsets.all(12),
           children: [
-            Card(child: ListTile(title: const Text('Total Sales Today'), subtitle: Text('₹${totalToday.toStringAsFixed(2)}',style: const TextStyle(
-              fontSize: 22,           // ✅ bigger font
-              fontWeight: FontWeight.bold,
-            ),))),
+            Card(
+              child: ListTile(
+                title: const Text('Total Sales Today'),
+                subtitle: Text(
+                  '₹${totalToday.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 22, // ✅ bigger font
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('Top Selling Items', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  if (top.isEmpty) const Text('No data yet')
-                  else ...top.entries.map((e) => ListTile(title: Text(e.key), trailing: Text('${e.value} sold',style: const TextStyle(
-                    fontSize: 18,       // ✅ increased font
-                    fontWeight: FontWeight.w600,
-                  ),))),
-                ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Top Selling Items',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    if (top.isEmpty)
+                      const Text('No data yet')
+                    else
+                      ...top.entries.map(
+                        (e) => ListTile(
+                          title: Text(e.key),
+                          trailing: Text(
+                            '${e.value} sold',
+                            style: const TextStyle(
+                              fontSize: 18, // ✅ increased font
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
-
-
 
             const SizedBox(height: 20),
 
@@ -167,17 +190,27 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               onPressed: () async {
-                await AdminReportPDF().generateAndSave(
-                  totalToday: totalToday,
-                  topItems: top,
-                );
+                try {
+                  await AdminReportPDF().generateAndSave(
+                    totalToday: totalToday,
+                    topItems: top,
+                  );
 
-                if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Admin report downloaded successfully"),
-                  ),
-                );
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Admin report downloaded successfully"),
+                    ),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Error: ${e.toString()}"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
             ),
           ],
@@ -186,4 +219,3 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 }
-

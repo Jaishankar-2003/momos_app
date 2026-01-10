@@ -156,7 +156,7 @@ class AdminReportPdfService {
               children: [
                 pw.Text("Total Sales Today", style: pw.TextStyle(fontSize: 16)),
                 pw.Text(
-                  "₹${totalToday.toStringAsFixed(2)}",
+                  "Rs ${totalToday.toStringAsFixed(2)}",
                   style: pw.TextStyle(
                     fontSize: 18,
                     fontWeight: pw.FontWeight.bold,
@@ -233,8 +233,15 @@ class AdminReportPdfService {
     required double totalToday,
     required Map<String, int> topItems,
   }) async {
-    final bytes = await generatePdf(totalToday: totalToday, topItems: topItems);
-    await savePdfWithPicker(bytes);
+    try {
+      final bytes = await generatePdf(
+        totalToday: totalToday,
+        topItems: topItems,
+      );
+      await savePdfWithPicker(bytes);
+    } catch (e) {
+      throw Exception('Failed to generate and save admin report PDF: $e');
+    }
   }
 }
 
