@@ -200,32 +200,35 @@ class AdminReportPdfService {
     );
   }
 
-  // 4️⃣ Save to Downloads
+  // 4️⃣ Save to Downloads (Android-compatible: opens share dialog for "save anywhere")
   Future<void> savePdfWithPicker(Uint8List bytes) async {
-    Directory? dir;
-
     if (Platform.isAndroid) {
-      dir = await getExternalStorageDirectory();
+      // On Android, use Printing.sharePdf which allows saving to any location
+      // This works on all Android versions without permission issues
+      final now = DateTime.now();
+      final date =
+          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+      await Printing.sharePdf(
+        bytes: bytes,
+        filename: 'Admin_Report_${date}_${now.millisecondsSinceEpoch}.pdf',
+      );
     } else {
-      dir =
+      // For iOS/Desktop, save to Downloads directory
+      final dir =
           await getDownloadsDirectory() ??
           await getApplicationDocumentsDirectory();
+
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+
+      final fileName =
+          'Admin_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final filePath = '${dir.path}/$fileName';
+      final file = File(filePath);
+
+      await file.writeAsBytes(bytes, flush: true);
     }
-
-    if (dir == null) {
-      throw Exception("Storage directory not available");
-    }
-
-    if (!await dir.exists()) {
-      await dir.create(recursive: true);
-    }
-
-    final fileName =
-        'Admin_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
-    final filePath = '${dir.path}/$fileName';
-    final file = File(filePath);
-
-    await file.writeAsBytes(bytes, flush: true);
   }
 
   // 5️⃣ Generate and Save (for compatibility with admin_dashboard)
