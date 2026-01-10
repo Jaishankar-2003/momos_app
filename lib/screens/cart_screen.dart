@@ -26,7 +26,8 @@ class CartScreen extends StatelessWidget {
     final savedOrder = OrderModel(id: id, itemsJson: order.itemsJson, total: order.total, date: order.date, time: order.time);
     provider.clearCart();
     // Show invoice via PDF
-    await PDFService().generateAndSharePdf(savedOrder);
+    //await PDFService().generateAndSharePdf(savedOrder);
+    await PDFService().generateAndSavePdf(savedOrder);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Order placed')));
     if (!context.mounted) return;
