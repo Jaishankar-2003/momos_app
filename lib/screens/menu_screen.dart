@@ -175,7 +175,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mallang's Momos"),
+        title: const Text("Mallai Momos (jspcs)"),
         actions: [
           IconButton(
             icon: const Icon(Icons.receipt_long),

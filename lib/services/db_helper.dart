@@ -35,13 +35,22 @@ class DBHelper
 
       // Default menu items that should exist
       final defaultItems = [
-        MenuItemModel(name: 'Veg Momos Boiled', price: 50),
-        MenuItemModel(name: 'Chicken Momos Boiled', price: 80),
-        MenuItemModel(name: 'Paneer Momos Boiled', price: 70),
-        MenuItemModel(name: 'Veg Momos Fried', price: 70),
-        MenuItemModel(name: 'Chicken Momos Fried', price: 70),
+        MenuItemModel(name: 'Veg Momos Boiled', price: 80),
+        MenuItemModel(name: 'Veg Momos Fried', price: 80),
+        MenuItemModel(name: 'Veg Momos Chilli', price: 100),
+        MenuItemModel(name: 'Chicken Momos Boiled', price: 100),
+        MenuItemModel(name: 'Chicken Momos Fried', price: 100),
+        MenuItemModel(name: 'Chicken Momos Chilli', price: 120),
+        MenuItemModel(name: 'Paneer Momos Boiled', price: 100),
+        MenuItemModel(name: 'Paneer Momos Fried', price: 100),
+        MenuItemModel(name: 'Paneer Momos Fried', price: 120),
         MenuItemModel(name: 'French Fries Veg', price: 70),
-        MenuItemModel(name: 'Paneer Momos Fried', price: 70),
+        MenuItemModel(name: 'Chilli potato Veg', price: 100),
+        MenuItemModel(name: 'Roll Veg', price: 60),
+        MenuItemModel(name: 'Chicken Roll', price: 80),
+        MenuItemModel(name: 'Veg Rice', price: 100),
+        MenuItemModel(name: 'Egg Rice', price: 110),
+        MenuItemModel(name: 'Chicken Rice', price: 130),
       ];
 
       // Add any missing items
@@ -100,13 +109,24 @@ class DBHelper
     if (db == null) {
       // Return default items for web
       return [
-        MenuItemModel(name: 'Veg Momos Boiled', price: 50),
-        MenuItemModel(name: 'Chicken Momos Boiled', price: 80),
-        MenuItemModel(name: 'Paneer Momos Boiled', price: 70),
-        MenuItemModel(name: 'Veg Momos Fried', price: 70),
-        MenuItemModel(name: 'Chicken Momos Fried', price: 70),
+        MenuItemModel(name: 'Veg Momos Boiled', price: 80),
+        MenuItemModel(name: 'Veg Momos Fried', price: 80),
+        MenuItemModel(name: 'Veg Momos Chilli', price: 100),
+        MenuItemModel(name: 'Chicken Momos Boiled', price: 100),
+        MenuItemModel(name: 'Chicken Momos Fried', price: 100),
+        MenuItemModel(name: 'Chicken Momos Chilli', price: 120),
+        MenuItemModel(name: 'Paneer Momos Boiled', price: 100),
+        MenuItemModel(name: 'Paneer Momos Fried', price: 100),
+        MenuItemModel(name: 'Paneer Momos Fried', price: 120),
         MenuItemModel(name: 'French Fries Veg', price: 70),
-        MenuItemModel(name: 'Paneer Momos Fried', price: 70),
+        MenuItemModel(name: 'Chilli potato Veg', price: 100),
+        MenuItemModel(name: 'Roll Veg', price: 60),
+        MenuItemModel(name: 'Chicken Roll', price: 80),
+        MenuItemModel(name: 'Veg Rice', price: 100),
+        MenuItemModel(name: 'Egg Rice', price: 110),
+        MenuItemModel(name: 'Chicken Rice', price: 130),
+
+
 
       ];
     }
