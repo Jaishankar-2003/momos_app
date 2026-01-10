@@ -175,7 +175,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mallai Momos (jspcs)"),
+        title: const Text("Mallai Momos (Jspcs)"),
         actions: [
           IconButton(
             icon: const Icon(Icons.receipt_long),
@@ -231,7 +231,7 @@ class _MenuScreenState extends State<MenuScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade600,
+                  color: Colors.green.shade600.withValues(alpha: 0.75),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: const [
                     BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))
@@ -245,7 +245,8 @@ class _MenuScreenState extends State<MenuScreen> {
                       style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600.withValues(alpha: 0.75),
+                    ),
                       onPressed: _openCart,
                       child: const Text(
                         'View Cart',

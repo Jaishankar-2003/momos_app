@@ -51,6 +51,17 @@ class DBHelper
         MenuItemModel(name: 'Veg Rice', price: 100),
         MenuItemModel(name: 'Egg Rice', price: 110),
         MenuItemModel(name: 'Chicken Rice', price: 130),
+        MenuItemModel(name: 'Panner Rice', price: 130),
+        MenuItemModel(name: 'Kalan Rice', price: 130),
+        MenuItemModel(name: 'Veg noodles', price: 100),
+        MenuItemModel(name: 'Egg noodles', price: 110),
+        MenuItemModel(name: 'Chicken noodles', price: 130),
+        MenuItemModel(name: 'Panner noodles', price: 130),
+        MenuItemModel(name: 'Kalan noodles', price: 130),
+        MenuItemModel(name: 'Chilli chicken', price: 120),
+        MenuItemModel(name: 'Chilli panner', price: 120),
+        MenuItemModel(name: 'Chilli kalan', price: 100),
+        MenuItemModel(name: 'Egg mix chicken Burgi', price: 120),
       ];
 
       // Add any missing items
@@ -125,6 +136,17 @@ class DBHelper
         MenuItemModel(name: 'Veg Rice', price: 100),
         MenuItemModel(name: 'Egg Rice', price: 110),
         MenuItemModel(name: 'Chicken Rice', price: 130),
+        MenuItemModel(name: 'Panner Rice', price: 130),
+        MenuItemModel(name: 'Kalan Rice', price: 130),
+        MenuItemModel(name: 'Veg noodles', price: 100),
+        MenuItemModel(name: 'Egg noodles', price: 110),
+        MenuItemModel(name: 'Chicken noodles', price: 130),
+        MenuItemModel(name: 'Panner noodles', price: 130),
+        MenuItemModel(name: 'Kalan noodles', price: 130),
+        MenuItemModel(name: 'Chilli chicken', price: 120),
+        MenuItemModel(name: 'Chilli panner', price: 120),
+        MenuItemModel(name: 'Chilli kalan', price: 100),
+        MenuItemModel(name: 'Egg mix chicken Burgi', price: 120),
 
 
 
