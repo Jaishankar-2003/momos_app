@@ -35,7 +35,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
         child: ListView(
           padding: const EdgeInsets.all(12),
           children: [
-            Card(child: ListTile(title: const Text('Total Sales Today'), subtitle: Text('₹${totalToday.toStringAsFixed(2)}'))),
+            Card(child: ListTile(title: const Text('Total Sales Today'), subtitle: Text('₹${totalToday.toStringAsFixed(2)}',style: const TextStyle(
+              fontSize: 22,           // ✅ bigger font
+              fontWeight: FontWeight.bold,
+            ),))),
             const SizedBox(height: 12),
             Card(
               child: Padding(
@@ -44,7 +47,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   const Text('Top Selling Items', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   if (top.isEmpty) const Text('No data yet')
-                  else ...top.entries.map((e) => ListTile(title: Text(e.key), trailing: Text('${e.value} sold'))),
+                  else ...top.entries.map((e) => ListTile(title: Text(e.key), trailing: Text('${e.value} sold',style: const TextStyle(
+                    fontSize: 18,       // ✅ increased font
+                    fontWeight: FontWeight.w600,
+                  ),))),
                 ]),
               ),
             ),

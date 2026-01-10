@@ -37,7 +37,7 @@ class MenuItemModel {
   // 🥗 Auto detect veg / non-veg from name
   bool get isVeg {
     final lower = name.toLowerCase();
-    return lower.contains('veg') || lower.contains('paneer');
+    return lower.contains('veg') || lower.contains('paneer') || lower.contains('kalan')|| lower.contains('Kalan')|| lower.contains('Paneer');
   }
 
   // 🎨 Get color directly for UI usage

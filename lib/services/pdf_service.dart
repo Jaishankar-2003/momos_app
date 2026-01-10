@@ -157,6 +157,13 @@ class PDFService {
                 ),
               ),
             ),
+            pw.Text(
+              "Customer: ${order.customerName}",
+              style: pw.TextStyle(
+                fontSize: 18,           // ✅ increase font size
+                fontWeight: pw.FontWeight.bold,  // ✅ make it bold
+              ),
+            ),
             pw.Text("Invoice ID: ${order.id ?? 'N/A'}"),
             pw.Text("Date: ${order.date}   Time: ${order.time}"),
             pw.SizedBox(height: 10),
@@ -172,8 +179,8 @@ class PDFService {
                 return [
                   item['name'],
                   qty.toString(),
-                  "₹${price.toStringAsFixed(2)}",
-                  "₹${total.toStringAsFixed(2)}"
+                  "Rs : ${price.toStringAsFixed(2)}",
+                  "Rs : ${total.toStringAsFixed(2)}"
                 ];
               }).toList(),
             ),
@@ -182,7 +189,7 @@ class PDFService {
             pw.Align(
               alignment: pw.Alignment.centerRight,
               child: pw.Text(
-                "TOTAL: ₹${order.total.toStringAsFixed(2)}",
+                "TOTAL: Rs : ${order.total.toStringAsFixed(2)}",
                 style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
               ),
             ),
@@ -202,8 +209,28 @@ class PDFService {
         await dir.create(recursive: true);
       }
 
+//       final safeTime = order.time.replaceAll(":", "-");
+//       final filePath = "${dir.path}/invoice_${order.date}_$safeTime.pdf";
+//
+//       final file = File(filePath);
+//       await file.writeAsBytes(await pdf.save());
+//
+//       print("PDF saved at: $filePath");
+//     } catch (e) {
+//       throw Exception("Failed to save invoice PDF: $e");
+//     }
+//   }
+// }
+      // Safe customer name for filename
+      final safeCustomerName = order.customerName
+          .replaceAll(RegExp(r'[^\w\s-]'), '') // remove special chars
+          .replaceAll(' ', '_');               // replace spaces with underscores
+
+      // Safe time for filename
       final safeTime = order.time.replaceAll(":", "-");
-      final filePath = "${dir.path}/invoice_${order.date}_$safeTime.pdf";
+
+      // Final file path including customer name
+      final filePath = "${dir.path}/${safeCustomerName}_${order.date}_${safeTime}.pdf";
 
       final file = File(filePath);
       await file.writeAsBytes(await pdf.save());

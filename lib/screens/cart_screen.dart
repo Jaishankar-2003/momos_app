@@ -201,12 +201,26 @@ Future<String?> _askCustomerName(BuildContext context) async {
           onPressed: () => Navigator.pop(ctx),
           child: const Text('Cancel'),
         ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     final name = controller.text.trim();
+        //     if (name.isNotEmpty) {
+        //       Navigator.pop(ctx, name);
+        //     }
+        //   },
+        //   child: const Text('Confirm'),
+        // ),
         ElevatedButton(
           onPressed: () {
-            final name = controller.text.trim();
-            if (name.isNotEmpty) {
-              Navigator.pop(ctx, name);
+            String name = controller.text.trim();
+
+            // If empty, generate a random customer name
+            if (name.isEmpty) {
+              final random = DateTime.now().millisecondsSinceEpoch % 10000;
+              name = "Customer_$random";
             }
+
+            Navigator.pop(ctx, name);
           },
           child: const Text('Confirm'),
         ),
