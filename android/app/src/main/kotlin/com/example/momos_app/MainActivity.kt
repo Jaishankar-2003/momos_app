@@ -12,7 +12,6 @@ class MainActivity : FlutterActivity() {
         val wifi =
             applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         multicastLock = wifi.createMulticastLock("momos_multicast")
-        multicastLock?.setReferenceCounted(true)
         multicastLock?.acquire()
     }
 

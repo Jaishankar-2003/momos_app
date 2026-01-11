@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_nsd/flutter_nsd.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'permissions.dart';
 
 class NetworkService with ChangeNotifier {
   static const String _serviceName = 'momos_app_host';
@@ -17,6 +18,12 @@ class NetworkService with ChangeNotifier {
 
   bool _isHost = false;
   bool get isHost => _isHost;
+
+  bool _isDiscovering = false;
+  bool get isDiscovering => _isDiscovering;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
 
   final List<Socket> _clients = [];
   Socket? _hostSocket;
@@ -51,87 +58,131 @@ class NetworkService with ChangeNotifier {
 
   // ---------------- HOST ----------------
   Future<void> startHost() async {
-    await _ensureWifi();
-    _isHost = true;
+    try {
+      _errorMessage = null;
+      await _ensureWifi();
+      _isHost = true;
 
-    _serverSocket = await ServerSocket.bind(InternetAddress.anyIPv4, 0);
+      _serverSocket = await ServerSocket.bind(InternetAddress.anyIPv4, 0);
 
-    // Note: flutter_nsd 1.6.0 only supports client discovery, not server registration
-    // Server socket is created but NSD registration is not available in this package version
-    // You may need to use platform-specific code or a different package for NSD server functionality
+      // Note: flutter_nsd 1.6.0 only supports client discovery, not server registration
+      // Server socket is created but NSD registration is not available in this package version
+      // You may need to use platform-specific code or a different package for NSD server functionality
 
-    _serverSocket!.listen((client) {
-      _clients.add(client);
-      client.listen(
-        (data) {
-          try {
-            final msg = _decrypt(data);
-            debugPrint('Client → Host: $msg');
-            broadcast('Echo: $msg');
-          } catch (e) {
-            debugPrint('Error decrypting message: $e');
-          }
-        },
-        onError: (error) {
-          debugPrint('Client error: $error');
-          _clients.remove(client);
-        },
-        onDone: () {
-          _clients.remove(client);
-        },
-      );
-    });
+      _serverSocket!.listen((client) {
+        _clients.add(client);
+        client.listen(
+          (data) {
+            try {
+              final msg = _decrypt(data);
+              debugPrint('Client → Host: $msg');
+              broadcast('Echo: $msg');
+            } catch (e) {
+              debugPrint('Error decrypting message: $e');
+            }
+          },
+          onError: (error) {
+            debugPrint('Client error: $error');
+            _clients.remove(client);
+          },
+          onDone: () {
+            _clients.remove(client);
+          },
+        );
+      });
 
-    notifyListeners();
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = 'Failed to start host: ${e.toString()}';
+      _isHost = false;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   // ---------------- CLIENT ----------------
   Future<void> startDiscovery() async {
-    await _ensureWifi();
+    try {
+      _errorMessage = null;
+      await _ensureWifi();
 
-    _nsd.stream.listen(
-      (service) async {
-        if (_hostSocket != null) {
-          return;
-        }
-        if (service.name == _serviceName &&
-            service.hostname != null &&
-            service.port != null) {
-          try {
-            _hostSocket = await Socket.connect(
-              service.hostname!,
-              service.port!,
-            );
-            _hostSocket!.listen(
-              (data) {
-                try {
-                  final msg = _decrypt(data);
-                  debugPrint('Host → Client: $msg');
-                } catch (e) {
-                  debugPrint('Error decrypting message: $e');
-                }
-              },
-              onError: (error) {
-                debugPrint('Socket error: $error');
-                _hostSocket?.destroy();
-                _hostSocket = null;
-              },
-              onDone: () {
-                _hostSocket?.destroy();
-                _hostSocket = null;
-              },
-            );
-          } catch (e) {
-            debugPrint('Error connecting to host: $e');
+      // Request WiFi permissions before starting discovery
+      final permissionsGranted = await requestWifiPermissions();
+      if (!permissionsGranted) {
+        _errorMessage =
+            'WiFi permissions are required for discovery. Please grant permissions in settings.';
+        _isDiscovering = false;
+        notifyListeners();
+        throw Exception('WiFi permissions denied');
+      }
+
+      _isDiscovering = true;
+      notifyListeners();
+
+      _nsd.stream.listen(
+        (service) async {
+          if (_hostSocket != null) {
+            return;
           }
-        }
-      },
-      onError: (error) {
-        debugPrint('Discovery error: $error');
-      },
-    );
+          if (service.name == _serviceName &&
+              service.hostname != null &&
+              service.port != null) {
+            try {
+              _hostSocket = await Socket.connect(
+                service.hostname!,
+                service.port!,
+              );
+              _isDiscovering = false;
+              _errorMessage = null;
+              notifyListeners();
 
-    await _nsd.discoverServices(_serviceType);
+              _hostSocket!.listen(
+                (data) {
+                  try {
+                    final msg = _decrypt(data);
+                    debugPrint('Host → Client: $msg');
+                  } catch (e) {
+                    debugPrint('Error decrypting message: $e');
+                  }
+                },
+                onError: (error) {
+                  debugPrint('Socket error: $error');
+                  _hostSocket?.destroy();
+                  _hostSocket = null;
+                  _isDiscovering = false;
+                  notifyListeners();
+                },
+                onDone: () {
+                  _hostSocket?.destroy();
+                  _hostSocket = null;
+                  _isDiscovering = false;
+                  notifyListeners();
+                },
+              );
+            } catch (e) {
+              debugPrint('Error connecting to host: $e');
+              _errorMessage = 'Failed to connect to host: ${e.toString()}';
+              _isDiscovering = false;
+              notifyListeners();
+            }
+          }
+        },
+        onError: (error) {
+          debugPrint('Discovery error: $error');
+          _errorMessage = 'Discovery failed: ${error.toString()}';
+          _isDiscovering = false;
+          notifyListeners();
+        },
+      );
+
+      await _nsd.discoverServices(_serviceType);
+    } catch (e) {
+      _errorMessage = 'Failed to start discovery: ${e.toString()}';
+      _isDiscovering = false;
+      _isHost = false;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   // ---------------- DATA ----------------
@@ -168,8 +219,10 @@ class NetworkService with ChangeNotifier {
       _isHost = false;
     } else {
       await _nsd.stopDiscovery();
+      _isDiscovering = false;
     }
 
+    _errorMessage = null;
     notifyListeners();
   }
 }

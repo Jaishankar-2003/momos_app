@@ -6,6 +6,7 @@ import 'screens/cart_screen.dart';
 import 'screens/order_history_screen.dart';
 import 'screens/admin_dashboard.dart';
 import 'services/db_helper.dart';
+import 'services/network_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +21,11 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => OrderProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => NetworkService()),
+      ],
       child: MaterialApp(
         title: "Mallang's Momos POS",
         debugShowCheckedModeBanner: false,
